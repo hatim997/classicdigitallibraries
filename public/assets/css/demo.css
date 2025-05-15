@@ -13,7 +13,7 @@
 
 .app-brand-logo.demo {
   -ms-flex-align: center;
-  align-items: center;
+  /* align-items: center; */
   -ms-flex-pack: center;
   justify-content: center;
   display: -ms-flexbox;
@@ -28,7 +28,7 @@
 }
 
 .app-brand-text.demo {
-  font-size: 1.375rem;
+  font-size: 0.8rem;
 }
 
 /* ! For .layout-navbar-fixed added fix padding top tpo .layout-page */

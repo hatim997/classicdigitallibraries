@@ -16,7 +16,14 @@ class LoginController extends Controller
     public function login()
     {
         if (Auth::check()) {
-            return redirect()->route('dashboard');
+            $user = Auth::user();
+            $currentUser = User::find($user->id);
+            // Check if the user has role 'super-admin' or 'admin'
+            if ($currentUser->hasRole('super-admin') || $currentUser->hasRole('admin')) {
+                return redirect()->route('dashboard');
+            } else {
+                return redirect()->route('frontend.home');
+            }
         } else {
             return view('auth.login');
         }
