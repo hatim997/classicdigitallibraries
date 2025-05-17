@@ -175,22 +175,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('ebooks/json', [EbookController::class, 'json'])->name('ebooks.json');
     Route::get('episodes/json', [EpisodeController::class, 'json'])->name('episodes.json');
 
-});
-
-// Frontend Pages Routes
-Route::name('frontend.')->group(function () {
-    Route::middleware(['auth','check.activation'])->group(function () {
-        Route::get('novels', [FrontendHomeController::class, 'home'])->name('home');
-        Route::get('new-episodes', [FrontendHomeController::class, 'newEpisodes'])->name('new.episodes');
-        Route::get('novels-deatils/{id}', [FrontendHomeController::class, 'novelDetails'])->name('novel.details');
-        Route::get('subcourses/{id}', [FrontendHomeController::class, 'subcourseDetails'])->name('subcourse.details');
-        Route::get('read_novel/{id}', [FrontendHomeController::class, 'readNovel'])->name('read.novel');
-        Route::post('reviews/store/{id}', [FrontendHomeController::class, 'storeReview'])->name('reviews.store');
-        Route::get('add/favourite/{id}', [FrontendHomeController::class, 'addFavourite'])->name('add.favourite');
-        Route::get('my/favourite', [FrontendHomeController::class, 'myFavourites'])->name('my-favourites');
+    // Frontend Pages Routes
+    Route::name('frontend.')->group(function () {
+        Route::middleware(['auth','check.activation'])->group(function () {
+            Route::get('novels', [FrontendHomeController::class, 'home'])->name('home');
+            Route::get('new-episodes', [FrontendHomeController::class, 'newEpisodes'])->name('new.episodes');
+            Route::get('novels-deatils/{id}', [FrontendHomeController::class, 'novelDetails'])->name('novel.details');
+            Route::get('subcourses/{id}', [FrontendHomeController::class, 'subcourseDetails'])->name('subcourse.details');
+            Route::get('read_novel/{id}', [FrontendHomeController::class, 'readNovel'])->name('read.novel');
+            Route::post('reviews/store/{id}', [FrontendHomeController::class, 'storeReview'])->name('reviews.store');
+            Route::get('add/favourite/{id}', [FrontendHomeController::class, 'addFavourite'])->name('add.favourite');
+            Route::get('my/favourite', [FrontendHomeController::class, 'myFavourites'])->name('my-favourites');
+        });
     });
 });
-
 
 //Artisan Routes
 Route::middleware(['auth'])->group(function () {
