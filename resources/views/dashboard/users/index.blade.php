@@ -14,9 +14,13 @@
         }
 
         .modal-card{
-            background: transparent !important; 
-            border: none !important; 
+            background: transparent !important;
+            border: none !important;
             box-shadow: none !important;
+        }
+        .col-20 {
+            width: 20% !important;
+            word-wrap: break-word;
         }
     </style>
 @endsection
@@ -123,81 +127,18 @@
                 @endcan
             </div>
             <div class="card-datatable table-responsive">
-                <table class="datatables-users table border-top custom-datatables">
+                <table class="datatables-users table border-top custom-json-datatables">
                     <thead>
                         <tr>
                             <th>{{ __('Sr.') }}</th>
                             <th>{{ __('Name') }}</th>
-                            <th>{{ __('Username') }}</th>
                             <th>{{ __('Email') }}</th>
-                            <th>{{ __('Role') }}</th>
-                            <th>{{ __('Created Date') }}</th>
+                            {{-- <th>{{ __('Role') }}</th> --}}
+                            <th>{{ __('Expiry Date') }}</th>
                             <th>{{ __('Status') }}</th>
                             @canany(['delete user', 'update user', 'view user'])<th>{{ __('Action') }}</th>@endcan
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach ($users as $index => $user)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->username }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ Str::title(str_replace('-', ' ', $user->getRoleNames()->first())) }}</td>
-                                <td>{{ $user->created_at->format('Y-m-d') }}</td>
-                                <td>
-                                    <span
-                                        class="badge me-4 bg-label-{{ $user->is_active == 'active' ? 'success' : 'danger' }}">{{ ucfirst($user->is_active) }}</span>
-                                </td>
-                                @canany(['delete user', 'update user', 'view user'])
-                                    <td class="d-flex">
-                                        @canany(['delete user'])
-                                            @if (!($user->getRoleNames()->first() == 'admin' || $user->getRoleNames()->first() == 'super-admin'))
-                                                <form action="{{ route('dashboard.user.destroy', $user->id) }}" method="POST">
-                                                    @method('DELETE')
-                                                    @csrf
-                                                    <a href="#" type="submit"
-                                                        class="btn btn-icon btn-text-danger waves-effect waves-light rounded-pill delete-record delete_confirmation"
-                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('Archive User') }}">
-                                                        <i class="ti ti-trash ti-md"></i>
-                                                    </a>
-                                                </form>
-                                            @endif
-                                        @endcan
-                                        @canany(['update user'])
-                                            <span class="text-nowrap">
-                                                <button
-                                                    class="btn btn-icon btn-text-primary waves-effect waves-light rounded-pill me-1"
-                                                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditUser"
-                                                    data-user-id="{{ $user->id }}">
-                                                    <i class="ti ti-edit ti-md"></i>
-                                                </button>
-                                            </span>
-                                            <span class="text-nowrap">
-                                                <a href="{{ route('dashboard.user.status.update', $user->id) }}"
-                                                    class="btn btn-icon btn-text-primary waves-effect waves-light rounded-pill me-1"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="{{ $user->is_active == 'active' ? __('Deactivate User') : __('Activate User') }}">
-                                                    @if ($user->is_active == 'active')
-                                                        <i class="ti ti-toggle-right ti-md text-success"></i>
-                                                    @else
-                                                        <i class="ti ti-toggle-left ti-md text-danger"></i>
-                                                    @endif
-                                                </a>
-                                            </span>
-                                        @endcan
-                                        @can(['view user'])
-                                            <button class="btn btn-icon btn-text-warning waves-effect waves-light rounded-pill me-1"
-                                                data-bs-toggle="modal" data-bs-target="#modalCenter"
-                                                data-user-id="{{ $user->id }}">
-                                                <i class="ti ti-eye ti-md"></i>
-                                            </button>
-                                        @endcan
-                                    </td>
-                                @endcan
-                            </tr>
-                        @endforeach
-                    </tbody>
                 </table>
             </div>
             <!-- Offcanvas to add new user -->
@@ -216,6 +157,93 @@
     {{-- <script src="{{asset('assets/js/app-user-list.js')}}"></script> --}}
     <script>
         $(document).ready(function() {
+            $(function () {
+                $('.custom-json-datatables').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "{{ route('users.json') }}",
+                        type: 'GET',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    },
+                    columns: [
+                        { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                        { data: 'name', name: 'name' , className: 'col-20'},
+                        { data: 'email', name: 'email' , className: 'col-20'},
+                        // { data: 'role', name: 'role'},
+                        { data: 'expiry_date', name: 'expiry_date'},
+                        { data: 'status', name: 'status'},
+                        { data: 'action', name: 'action', orderable: false, searchable: false , className: 'col-20'},
+                    ],
+                    language: {
+                        searchPlaceholder: 'Search...',
+                        paginate: {
+                            next: '<i class="ti ti-chevron-right ti-sm"></i>',
+                            previous: '<i class="ti ti-chevron-left ti-sm"></i>'
+                        }
+                    },
+                    dom: 'Bfrtip',
+                    dom: '<"row"' +
+                        '<"col-md-2"<l>>' +
+                        '<"col-md-10"<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0"fB>>' +
+                        '>t' +
+                        '<"row"' +
+                        '<"col-sm-12 col-md-6"i>' +
+                        '<"col-sm-12 col-md-6"p>' +
+                        '>',
+                    buttons: [{
+                        extend: 'collection',
+                        className: 'btn btn-label-secondary dropdown-toggle me-4 waves-effect waves-light border-left-0 border-right-0 rounded',
+                        text: '<i class="ti ti-upload ti-xs me-sm-1 align-text-bottom"></i> <span class="d-none d-sm-inline-block">{{__("Export")}}</span>',
+                        buttons: [{
+                                extend: 'print',
+                                text: '<i class="ti ti-printer me-1"></i>{{__("Print")}}',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: ':not(:last-child)' // Exclude the last column (Actions)
+                                }
+                            },
+                            {
+                                extend: 'csv',
+                                text: '<i class="ti ti-file-text me-1"></i>{{__("Csv")}}',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: ':not(:last-child)' // Exclude the last column (Actions)
+                                }
+                            },
+                            {
+                                extend: 'excel',
+                                text: '<i class="ti ti-file-spreadsheet me-1"></i>{{__("Excel")}}',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: ':not(:last-child)' // Exclude the last column (Actions)
+                                }
+                            },
+                            {
+                                extend: 'pdf',
+                                text: '<i class="ti ti-file-description me-1"></i>{{__("Pdf")}}',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: ':not(:last-child)' // Exclude the last column (Actions)
+                                }
+                            },
+                            {
+                                extend: 'copy',
+                                text: '<i class="ti ti-copy me-1"></i>{{__("Copy")}}',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: ':not(:last-child)' // Exclude the last column (Actions)
+                                }
+                            }
+                        ]
+                    }],
+                });
+            });
             $('.edit-loader').hide();
             $('#editUserForm').show();
             // Event listener for edit modal opening
@@ -251,6 +279,7 @@
                                 $('#edit_first_name').val(user.first_name);
                                 $('#edit_last_name').val(user.last_name);
                                 $('#edit_email').val(user.email);
+                                $('#edit_expiry_date').val(user.expiry_date);
                                 $('#edit-user-role').val(user.role).trigger('change');
 
                                 $('.edit-loader').hide();
@@ -261,8 +290,8 @@
                             }
                             if (isModal) {
                                 // ✅ Update Modal User Info
-                                var profileImage = user.profile_image 
-                                    ? '{{ asset("") }}' + user.profile_image 
+                                var profileImage = user.profile_image
+                                    ? '{{ asset("") }}' + user.profile_image
                                     : '{{ asset("assets/img/default/user.png") }}';
                                 $('#user-info img').attr('src', profileImage);
                                 $('#user-info .user-info h5').text(user.full_name ? user.full_name :
@@ -273,6 +302,7 @@
                                 var userDetails = `
                                     <li class="mb-2"><span class="h6">{{ __('Username') }}:</span> <span>${user.username ? user.username : 'N/A'}</span></li>
                                     <li class="mb-2"><span class="h6">{{ __('Email') }}:</span> <span>${user.email ? user.email : 'N/A'}</span></li>
+                                    <li class="mb-2"><span class="h6">{{ __('Expiry') }}:</span> <span>${user.expiry_date ? new Date(user.expiry_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' }) : 'N/A'}</span></li>
                                     <li class="mb-2"><span class="h6">{{ __('Status') }}:</span> <span>${user.is_active ? user.is_active.replace(/\b\w/g, c => c.toUpperCase()) : 'Inactive'}</span></li>
                                     <li class="mb-2"><span class="h6">{{ __('Designation') }}:</span> <span>${user.designation ? user.designation : 'N/A'}</span></li>
                                     <li class="mb-2"><span class="h6">{{ __('Contact') }}:</span> <span>${user.phone_number ? user.phone_number : 'N/A'}</span></li>
@@ -298,7 +328,7 @@
                                 if (user.github_url) {
                                     socialLinks += `<a href="${user.github_url}" target="_blank" style="color: inherit;"><i class="fab fa-github fa-lg"></i></a>`;
                                 }
-                                
+
                                 $('#modalSocialIcons').html(socialLinks); // Update social icons container
 
                                 $('.edit-loader').hide();

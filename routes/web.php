@@ -5,12 +5,16 @@ use App\Http\Controllers\Auth\GithubController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Dashboard\CourseController;
+use App\Http\Controllers\Dashboard\EbookController;
+use App\Http\Controllers\Dashboard\EpisodeController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\NotificationController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RolePermission\PermissionController;
 use App\Http\Controllers\Dashboard\RolePermission\RoleController;
 use App\Http\Controllers\Dashboard\SettingController;
+use App\Http\Controllers\Dashboard\SubCourseController;
 use App\Http\Controllers\Dashboard\User\ArchivedUserController;
 use App\Http\Controllers\Dashboard\User\UserController;
 use App\Http\Controllers\Frontend\HomeController as FrontendHomeController;
@@ -101,6 +105,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/deactivated', function () {
         return view('errors.deactivated');
     })->name('deactivated');
+    Route::get('/expiry', function () {
+        return view('errors.expiry');
+    })->name('expiry');
     Route::middleware(['check.activation'])->group(function () {
 
         Route::resource('profile', ProfileController::class);
@@ -139,16 +146,40 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             // User Dashboard Authentication Routes
 
+            //Courses
+            Route::resource('courses', CourseController::class);
+            Route::get('courses/{id}/reviews', [CourseController::class, 'courseReviews'])->name('courses.reviews');
+            Route::get('courses/{id}/reviews/create', [CourseController::class, 'courseReviewCreate'])->name('courses.reviews.create');
+            Route::post('courses/{id}/reviews/store', [CourseController::class, 'courseReviewStore'])->name('courses.reviews.store');
+            Route::get('courses/reviews/edit/{id}', [CourseController::class, 'courseReviewEdit'])->name('courses.reviews.edit');
+            Route::put('courses/reviews/update/{id}', [CourseController::class, 'courseReviewUpdate'])->name('courses.reviews.update');
+            Route::delete('courses/reviews/delete/{id}', [CourseController::class, 'courseReviewDestroy'])->name('courses.reviews.delete');
+
+            //SubCourses
+            Route::resource('subcourses', SubCourseController::class);
+
+            //Ebooks
+            Route::resource('ebooks', EbookController::class);
+
+            //Episodes
+            Route::resource('episodes', EpisodeController::class);
+
+
 
 
         });
     });
+    Route::get('users/json', [UserController::class, 'json'])->name('users.json');
+    Route::get('courses/json', [CourseController::class, 'json'])->name('courses.json');
+    Route::get('subcourses/json', [SubCourseController::class, 'json'])->name('subcourses.json');
+    Route::get('ebooks/json', [EbookController::class, 'json'])->name('ebooks.json');
+    Route::get('episodes/json', [EpisodeController::class, 'json'])->name('episodes.json');
 
 });
 
 // Frontend Pages Routes
 Route::name('frontend.')->group(function () {
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth','check.activation'])->group(function () {
         Route::get('novels', [FrontendHomeController::class, 'home'])->name('home');
         Route::get('new-episodes', [FrontendHomeController::class, 'newEpisodes'])->name('new.episodes');
         Route::get('novels-deatils/{id}', [FrontendHomeController::class, 'novelDetails'])->name('novel.details');

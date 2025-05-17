@@ -37,6 +37,10 @@
 
 <script>
     $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Select Option",
+            allowClear: true
+        });
         $(document).on('click', '.copy-icon', function() {
             var textToCopy = $(this).prev().text().trim(); // Get text from previous element
 

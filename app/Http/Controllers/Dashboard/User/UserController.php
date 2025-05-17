@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 use Spatie\Permission\Models\Role;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -27,19 +29,106 @@ class UserController extends Controller
     {
         $this->authorize('view user');
         try {
-            $users  = User::with('profile')->get();
+            // $users  = User::with('profile')->get();
             $totalUsers = User::count();
             $totalDeactivatedUsers = User::where('is_active', 'inactive')->count();
             $totalActiveUsers = User::where('is_active', 'active')->count();
             $totalUnverifiedUsers = User::where('email_verified_at', null)->count();
             $totalArchivedUsers = User::onlyTrashed()->count();
             $roles = Role::all();
-            return view('dashboard.users.index', compact('users', 'totalUsers', 'totalDeactivatedUsers', 'totalActiveUsers', 'totalUnverifiedUsers', 'roles', 'totalArchivedUsers'));
+            return view('dashboard.users.index', compact('totalUsers', 'totalDeactivatedUsers', 'totalActiveUsers', 'totalUnverifiedUsers', 'roles', 'totalArchivedUsers'));
         } catch (\Throwable $th) {
             // Handle the exception
             // throw $th;
             Log::error("User Index Failed:" . $th->getMessage());
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
+        }
+    }
+
+    public function json(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+                $data = User::with('profile')->select(['id', 'name', 'email', 'expiry_date' ,'is_active'])->orderBy('id','desc');
+                return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->editColumn('expiry_date', function ($row) {
+                        return \Carbon\Carbon::parse($row->expiry_date)->format('F d, Y');
+                    })
+                    ->addColumn('role', function ($row) {
+                        return Str::title(str_replace('-', ' ', $row->getRoleNames()->first()));
+                    })
+                    ->addColumn('status', function ($row) {
+                        $badgeClass = $row->is_active == 'active' ? 'success' : 'danger';
+                        return '<span class="badge me-4 bg-label-' . $badgeClass . '">' . ucfirst($row->is_active) . '</span>';
+                    })
+                    ->addColumn('action', function ($row) {
+                        $btn = '';
+                        if (auth()->user()->canany(['delete user', 'update user', 'view user'])) {
+                            $btn .= '<div class="d-flex">';
+
+                            // Delete button (if not admin or super-admin)
+                            if (auth()->user()->can('delete user')) {
+                                $role = $row->getRoleNames()->first();
+                                if ($role !== 'admin' && $role !== 'super-admin') {
+                                    $btn .= '
+                                        <form action="' . route('dashboard.user.destroy', $row->id) . '" method="POST" class="delete-form">
+                                            ' . method_field('DELETE') . csrf_field() . '
+                                            <a href="#" class="btn btn-icon btn-text-danger waves-effect waves-light rounded-pill delete-record delete_confirmation"
+                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Archive User">
+                                                <i class="ti ti-trash ti-md"></i>
+                                            </a>
+                                        </form>';
+                                }
+                            }
+
+                            // Edit and Status toggle buttons
+                            if (auth()->user()->can('update user')) {
+                                $statusIcon = $row->is_active == 'active'
+                                    ? '<i class="ti ti-toggle-right ti-md text-success"></i>'
+                                    : '<i class="ti ti-toggle-left ti-md text-danger"></i>';
+                                $statusTitle = $row->is_active == 'active' ? 'Deactivate User' : 'Activate User';
+
+                                $btn .= '
+                                    <span class="text-nowrap">
+                                        <button class="btn btn-icon btn-text-primary waves-effect waves-light rounded-pill me-1"
+                                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditUser"
+                                            data-user-id="' . $row->id . '">
+                                            <i class="ti ti-edit ti-md"></i>
+                                        </button>
+                                    </span>
+                                    <span class="text-nowrap">
+                                        <a href="' . route('dashboard.user.status.update', $row->id) . '"
+                                            class="btn btn-icon btn-text-primary waves-effect waves-light rounded-pill me-1"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="' . $statusTitle . '">
+                                            ' . $statusIcon . '
+                                        </a>
+                                    </span>';
+                            }
+
+                            // View button
+                            if (auth()->user()->can('view user')) {
+                                $btn .= '
+                                    <button class="btn btn-icon btn-text-warning waves-effect waves-light rounded-pill me-1"
+                                        data-bs-toggle="modal" data-bs-target="#modalCenter"
+                                        data-user-id="' . $row->id . '">
+                                        <i class="ti ti-eye ti-md"></i>
+                                    </button>';
+                            }
+
+                            $btn .= '</div>';
+                        }
+
+                        return $btn;
+                    })
+                    ->rawColumns(['action', 'status'])
+                    ->make(true);
+
+            } catch (\Throwable $e) {
+                return response()->json(['error' => 'Something went wrong while fetching data.'], 500);
+            }
+        } else {
+            return response()->json(['error' => 'Invalid request.'], 400);
         }
     }
 
@@ -60,6 +149,7 @@ class UserController extends Controller
         $validate = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'expiry_date' => 'required|date',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => [
                 'required',
@@ -84,6 +174,7 @@ class UserController extends Controller
             $user = new User();
             $user->name = $request->first_name . ' ' . $request->last_name;
             $user->email = $request->email;
+            $user->expiry_date = $request->expiry_date;
             $user->password = Hash::make($request->password);
             $user->email_verified_at = now();
             $username = $this->generateUsername($request->first_name . ' ' . $request->last_name);
@@ -145,11 +236,12 @@ class UserController extends Controller
                 'success' => true,
                 'user' => [
                     'id' => $user->id,
-                    'first_name' => $user->profile->first_name,
+                    'first_name' => $user->profile->first_name ?? $user->name,
                     'last_name' => $user->profile->last_name ?? null,
+                    'expiry_date' => $user->expiry_date ?? null,
                     'email' => $user->email ?? null,
                     'username' => $user->username ?? null,
-                    'role' => $user->getRoleNames()->first(), // ✅ Ensure role is included
+                    'role' => $user->getRoleNames()->first() ?? 'user', // ✅ Ensure role is included
                     'full_name' => $user->name,
                     'is_active' => $user->is_active,
                     'profile_image' => $user->profile->profile_image ?? null,
@@ -159,7 +251,7 @@ class UserController extends Controller
                     'marital_status' => $user->profile->maritalStatus->name ?? null,
                     'designation' => $user->profile->designation->name ?? null,
                     'country' => $user->profile->country->name ?? null,
-                    'phone_number' => $user->profile->phone_number,
+                    'phone_number' => $user->profile->phone_number ?? null,
                     'bio' => $user->profile->bio ?? null,
                     'facebook_url' => $user->profile->facebook_url ?? null,
                     'skype_url' => $user->profile->skype_url ?? null,
@@ -186,7 +278,8 @@ class UserController extends Controller
         $this->authorize('update user');
         $validate = Validator::make($request->all(), [
             'edit_first_name' => 'required|string|max:255',
-            'edit_last_name' => 'required|string|max:255',
+            'edit_last_name' => 'nullable|string|max:255',
+            'edit_expiry_date' => 'required|date',
             'edit_role' => 'required|exists:roles,name'
         ]);
 
@@ -199,11 +292,16 @@ class UserController extends Controller
 
             $user = User::findOrFail($id);
             $user->name = $request->edit_first_name . ' ' . $request->edit_last_name;
+            $user->expiry_date = $request->edit_expiry_date;
             $user->save();
 
             $user->syncRoles($request->edit_role);
 
-            $profile = Profile::where('user_id', $user->id)->firstOrFail();
+            $profile = Profile::where('user_id', $user->id)->first();
+            if (!$profile) {
+                $profile = new Profile();
+                $profile->user_id = $user->id;
+            }
             $profile->first_name = $request->edit_first_name;
             $profile->last_name = $request->edit_last_name;
             $profile->save();

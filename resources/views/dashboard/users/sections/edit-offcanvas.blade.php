@@ -43,6 +43,15 @@
                     aria-label="john.doe@example.com" disabled/>
             </div>
             <div class="mb-6">
+                <label class="form-label" for="edit_expiry_date">{{ __('Expiry Date') }}</label>
+                <input type="date" id="edit_expiry_date" class="form-control @error('edit_expiry_date') is-invalid @enderror" placeholder="Enter expiry date" name="edit_expiry_date" required/>
+                @error('edit_expiry_date')
+                    <span class="invalid-feedback" role="alert">
+                        {{ $message }}
+                    </span>
+                @enderror
+            </div>
+            <div class="mb-6">
                 <label class="form-label" for="user-role">{{ __('User Role') }}</label>
                 <select id="edit-user-role" name="edit_role" class="select2 form-select @error('edit_role') is-invalid @enderror">
                     <option value="" selected disabled>{{ __('Select Role') }}</option>
@@ -62,7 +71,7 @@
             @canany(['update user'])
                 <button id="editUserBtn" type="submit" class="btn btn-primary me-3 data-submit">
                     <span id="editUserText">
-                        <span id="editUserLoader" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span> 
+                        <span id="editUserLoader" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         {{ __('Submit') }}
                     </span>
                 </button>

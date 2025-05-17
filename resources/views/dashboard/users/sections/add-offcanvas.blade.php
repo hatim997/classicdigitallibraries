@@ -36,6 +36,15 @@
                     </span>
                 @enderror
             </div>
+            <div class="mb-6">
+                <label class="form-label" for="expiry_date">{{ __('Expiry Date') }}</label>
+                <input type="date" id="expiry_date" class="form-control @error('expiry_date') is-invalid @enderror" placeholder="Enter expiry date" name="expiry_date" required/>
+                @error('expiry_date')
+                    <span class="invalid-feedback" role="alert">
+                        {{ $message }}
+                    </span>
+                @enderror
+            </div>
             <div class="mb-6 form-password-toggle">
                 <label class="form-label" for="password">{{ __('Password') }}</label>
                 <div class="input-group input-group-merge">
@@ -84,7 +93,7 @@
             @canany(['create user'])
                 <button id="addUserBtn" type="submit" class="btn btn-primary me-3 data-submit">
                     <span id="addUserText">
-                        <span id="addUserLoader" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span> 
+                        <span id="addUserLoader" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         {{ __('Submit') }}
                     </span>
                 </button>

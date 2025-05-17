@@ -28,6 +28,39 @@
         <li class="menu-header small">
             <span class="menu-header-text">{{__('Apps & Pages')}}</span>
         </li>
+
+        @can(['view course'])
+            <li class="menu-item {{ request()->routeIs('dashboard.courses.*') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.courses.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-book"></i>
+                    <div>{{__('Courses')}}</div>
+                </a>
+            </li>
+        @endcan
+        @can(['view sub course'])
+            <li class="menu-item {{ request()->routeIs('dashboard.subcourses.*') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.subcourses.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-book-2"></i>
+                    <div>{{__('Sub Courses')}}</div>
+                </a>
+            </li>
+        @endcan
+        @can(['view ebook'])
+            <li class="menu-item {{ request()->routeIs('dashboard.ebooks.*') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.ebooks.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-device-tablet"></i>
+                    <div>{{__('Ebook')}}</div>
+                </a>
+            </li>
+        @endcan
+        @can(['view episode'])
+            <li class="menu-item {{ request()->routeIs('dashboard.episodes.*') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.episodes.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-playlist"></i>
+                    <div>{{__('Episodes')}}</div>
+                </a>
+            </li>
+        @endcan
         @canany(['view user', 'view archived user'])
             <li class="menu-item {{ request()->routeIs('dashboard.user.*') || request()->routeIs('dashboard.archived-user.*') ? 'open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
