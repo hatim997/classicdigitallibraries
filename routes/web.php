@@ -58,11 +58,10 @@ Route::get('/current-time', function () {
 });
 
 Auth::routes();
-Route::get('/', [FrontendHomeController::class, 'home'])->name('home');
 // Route::get('/', function () {
-//     return redirect()->route('frontend.home');
-// });
-// Guest Routes
+    //     return redirect()->route('frontend.home');
+    // });
+    // Guest Routes
 Route::group(['middleware' => ['guest']], function () {
 
     //User Login Authentication Routes
@@ -101,7 +100,7 @@ Route::group(['middleware' => ['auth']], function () {
     // Verified notification
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/deactivated', function () {
         return view('errors.deactivated');
     })->name('deactivated');
@@ -109,7 +108,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('errors.expiry');
     })->name('expiry');
     Route::middleware(['check.activation'])->group(function () {
-
+        Route::get('/', [FrontendHomeController::class, 'home'])->name('home');
         Route::resource('profile', ProfileController::class);
         Route::post('profile/setting/account/{id}', [ProfileController::class, 'accountDeactivation'])->name('account.deactivate');
         Route::post('profile/security/password/{id}', [ProfileController::class, 'passwordUpdate'])->name('update.password');
@@ -168,16 +167,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
         });
-    });
-    Route::get('users/json', [UserController::class, 'json'])->name('users.json');
-    Route::get('courses/json', [CourseController::class, 'json'])->name('courses.json');
-    Route::get('subcourses/json', [SubCourseController::class, 'json'])->name('subcourses.json');
-    Route::get('ebooks/json', [EbookController::class, 'json'])->name('ebooks.json');
-    Route::get('episodes/json', [EpisodeController::class, 'json'])->name('episodes.json');
 
-    // Frontend Pages Routes
-    Route::name('frontend.')->group(function () {
-        Route::middleware(['auth','check.activation'])->group(function () {
+            // Frontend Pages Routes
+        Route::name('frontend.')->group(function () {
             Route::get('novels', [FrontendHomeController::class, 'home'])->name('home');
             Route::get('new-episodes', [FrontendHomeController::class, 'newEpisodes'])->name('new.episodes');
             Route::get('novels-deatils/{id}', [FrontendHomeController::class, 'novelDetails'])->name('novel.details');
@@ -188,6 +180,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('my/favourite', [FrontendHomeController::class, 'myFavourites'])->name('my-favourites');
         });
     });
+    Route::get('users/json', [UserController::class, 'json'])->name('users.json');
+    Route::get('courses/json', [CourseController::class, 'json'])->name('courses.json');
+    Route::get('subcourses/json', [SubCourseController::class, 'json'])->name('subcourses.json');
+    Route::get('ebooks/json', [EbookController::class, 'json'])->name('ebooks.json');
+    Route::get('episodes/json', [EpisodeController::class, 'json'])->name('episodes.json');
 });
 
 //Artisan Routes
