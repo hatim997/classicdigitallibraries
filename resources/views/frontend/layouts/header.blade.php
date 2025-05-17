@@ -19,35 +19,37 @@
                     <div class="main-navigation flex-lg-right">
                         <div class="cart-widget">
                             <!-- Logged-in user profile -->
-                            <div class="dropdown user-dropdown">
-                                <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{ asset(Auth::user()->profile->profile_image ?? 'assets/img/default/user.png') }}" alt="User Avatar" class="rounded-circle me-2" width="40" height="40">
-                                    <div class="user-info d-none d-md-block">
-                                        <span class="fw-semibold">Hi, {{ Auth::user()->name }}</span>
-                                    </div>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow-sm animate__animated animate__fadeIn" aria-labelledby="userDropdown">
-                                    {{-- <li>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-user me-2"></i> Profile
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-cog me-2"></i> Settings
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li> --}}
-                                    <li>
-                                        <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            <i class="fas fa-sign-out-alt me-2"></i> Logout
-                                        </a>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                            @csrf
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
+                            @if (Auth::check())
+                                <div class="dropdown user-dropdown">
+                                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="{{ asset(Auth::user()->profile->profile_image ?? 'assets/img/default/user.png') }}" alt="User Avatar" class="rounded-circle me-2" width="40" height="40">
+                                        <div class="user-info d-none d-md-block">
+                                            <span class="fw-semibold">Hi, {{ Auth::user()->name }}</span>
+                                        </div>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow-sm animate__animated animate__fadeIn" aria-labelledby="userDropdown">
+                                        {{-- <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="fas fa-user me-2"></i> Profile
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="fas fa-cog me-2"></i> Settings
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li> --}}
+                                        <li>
+                                            <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                            </a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                @csrf
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
