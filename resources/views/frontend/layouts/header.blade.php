@@ -67,7 +67,7 @@
                     </nav>
                 </div>
                 <div class="col-lg-3">
-                    @if (Auth::user()->expiry_date)
+                    @if (Auth::check() && Auth::user()->expiry_date)
                         <div class="header-phone color-white">
                             <div class="icon">
                                 <i class="fas fa-clock"></i>
