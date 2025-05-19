@@ -135,7 +135,7 @@
                                 <p class="d-block">Your Rating</p>
                                 <form action="{{ route('frontend.reviews.store', $course->id) }}" method="POST" class="mt--15 site-form">
                                     @csrf
-                                    <span class="rating-widget-block d-flex flex-row-reverse justify-content-start">
+                                    <span class="rating-widget-block d-flex justify-content-end">
                                         @for ($i = 5; $i >= 1; $i--)
                                             <input type="radio" name="rating" id="star{{ $i }}" value="{{ $i }}">
                                             <label for="star{{ $i }}"></label>

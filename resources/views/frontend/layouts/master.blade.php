@@ -56,6 +56,24 @@
             margin-top: 4px;
             font-size: 13px;
         }
+
+        .active-link{
+            border: 2px solid;
+            padding: 10px !important;
+            margin: 11px;
+        }
+
+        .menu-item a:hover{
+            border: 2px solid #fff;
+            color: #0247bc !important;
+            background-color: #fff;
+            padding: 10px !important;
+            margin: 11px;
+            transition-duration: .3s ease;
+        }
+        .menu-item a{
+            transition-duration: .3s ease;
+        }
     </style>
 </head>
 

@@ -83,13 +83,13 @@
                     <div class="main-navigation flex-lg-right">
                         <ul class="main-menu menu-right main-menu--white li-last-0">
                             <li class="menu-item">
-                                <a href="{{route('frontend.home')}}">Novels</a>
+                                <a class="{{ request()->routeIs('frontend.home') ? 'active-link' : '' }}" href="{{route('frontend.home')}}">Novels</a>
                             </li>
                             <li class="menu-item">
-                                <a href="{{route('frontend.new.episodes')}}">What's New</a>
+                                <a class="{{ request()->routeIs('frontend.new.episodes') ? 'active-link' : '' }}" href="{{route('frontend.new.episodes')}}">What's New</a>
                             </li>
                             <li class="menu-item">
-                                <a href="{{route('frontend.my-favourites')}}">My Favourites</a>
+                                <a class="{{ request()->routeIs('frontend.my-favourites') ? 'active-link' : '' }}" href="{{route('frontend.my-favourites')}}">My Favourites</a>
                             </li>
                         </ul>
                     </div>
