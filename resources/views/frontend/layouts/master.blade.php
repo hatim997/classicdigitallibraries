@@ -89,7 +89,7 @@
 
     <!-- Use Minified Plugins Version For Fast Page Load -->
     @include('frontend.layouts.script')
-    @yield('script')
+    {{-- @yield('script') --}}
 </body>
 
 </html>

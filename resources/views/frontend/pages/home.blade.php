@@ -37,33 +37,43 @@
                             <div class="product-card">
                                 <div class="product-grid-content">
                                     <div class="product-header">
-                                        <h3><a href="{{route('frontend.novel.details', $course->id)}}">{{ $course->name }}</a></h3>
+                                        <h3><a
+                                                href="{{ route('frontend.novel.details', $course->id) }}">{{ $course->name }}</a>
+                                        </h3>
                                     </div>
                                     <div class="product-card--body">
                                         <div class="card-image">
                                             <img style="height: 220px; width: 100%;"
                                                 src="{{ asset('courses/' . $course->image) }}" alt="">
                                             <div class="hover-contents">
-                                                <a href="{{route('frontend.novel.details', $course->id)}}" class="hover-image">
+                                                <a href="{{ route('frontend.novel.details', $course->id) }}"
+                                                    class="hover-image">
                                                     <img style="height: 220px; width: 100%;"
                                                         src="{{ asset('courses/' . $course->image) }}" alt="">
                                                 </a>
                                                 <div class="hover-btns">
                                                     @php
-                                                        $isFavourite = Auth::check() && Auth::user()->userFavourites->contains('course_id', $course->id);
+                                                        $isFavourite =
+                                                            Auth::check() &&
+                                                            Auth::user()->userFavourites->contains(
+                                                                'course_id',
+                                                                $course->id,
+                                                            );
                                                     @endphp
 
-                                                    <a href="{{ route('frontend.add.favourite', $course->id) }}" class="single-btn">
-                                                        <i class="fas fa-heart {{ $isFavourite ? 'text-warning' : '' }}"></i>
+                                                    <a href="{{ route('frontend.add.favourite', $course->id) }}"
+                                                        class="single-btn">
+                                                        <i
+                                                            class="fas fa-heart {{ $isFavourite ? 'text-warning' : '' }}"></i>
                                                     </a>
-                                                    <a href="{{route('frontend.novel.details', $course->id)}}"
+                                                    <a href="{{ route('frontend.novel.details', $course->id) }}"
                                                         class="single-btn">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
                                                 </div>
                                             </div>
                                         </div>
-                                        @php
+                                        {{-- @php
                                             $averageRating = number_format(
                                                 $course->reviews->map(fn($review) => $review->rating !== null ? (float)$review->rating : 0)->avg(),
                                                 1
@@ -87,7 +97,40 @@
                                                     (No reviews yet)
                                                 </div>
                                             @endif
+                                        </div> --}}
+                                        @php
+                                            // Only reviews with a rating (not null) for average calculation
+                                            $validRatings = $course->reviews
+                                                ->filter(fn($review) => $review->rating !== null)
+                                                ->pluck('rating')
+                                                ->map(fn($r) => (float) $r);
+                                            $averageRating = $validRatings->avg() ?? 0;
+                                            $averageRatingFormatted = number_format($averageRating, 1);
+
+                                            // All reviews (including those with null rating)
+                                            $reviewCount = $course->reviews->whereNotNull('review')->count();
+                                        @endphp
+
+                                        <div class="rating-summary mt-3">
+                                            <div class="rating-stars">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <span
+                                                        class="fas fa-star {{ $i <= round($averageRating) ? 'star_on' : '' }}"></span>
+                                                @endfor
+                                            </div>
+                                            @if ($reviewCount > 0)
+                                                <div class="review-count text-muted small">
+                                                    ({{ $averageRatingFormatted }} average / {{ $reviewCount }}
+                                                    {{ Str::plural('review', $reviewCount) }})
+                                                </div>
+                                            @else
+                                                <div class="review-count text-muted small">
+                                                    (No reviews yet)
+                                                </div>
+                                            @endif
                                         </div>
+
+
                                     </div>
                                 </div>
                             </div>
