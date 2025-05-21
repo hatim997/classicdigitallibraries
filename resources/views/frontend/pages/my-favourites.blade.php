@@ -62,6 +62,7 @@
         .hover-btns {
             display: flex;
             gap: 15px;
+            background: transparent !important;
         }
 
         .single-btn {
