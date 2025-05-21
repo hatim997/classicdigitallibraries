@@ -12,6 +12,87 @@
             overflow-y: auto !important;
         }
     </style>
+    <style>
+        .product-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: white;
+            position: relative;
+            height: 92%;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+            border-color: #c0c0c0;
+        }
+
+        .card-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px 15px 0 0;
+            border-bottom: 3px solid #eee;
+        }
+
+        .card-image img {
+            transition: transform 0.3s ease;
+            object-fit: cover;
+        }
+
+        .hover-contents {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-card:hover .hover-contents {
+            opacity: 1;
+        }
+
+        .hover-btns {
+            display: flex;
+            gap: 15px;
+        }
+
+        .single-btn {
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+            border: 2px solid #e5e7eb;
+            padding: 10px;
+        }
+
+        .single-btn:hover {
+            background: #eeee;
+            color: white;
+            transform: scale(1.1);
+            border-color: transparent;
+        }
+
+        .rating-summary {
+            padding: 1.2rem;
+            background: #f8fafc;
+            border-top: 2px solid #f1f5f9;
+        }
+
+        .rating-summary h3 a {
+            color: #2d3748;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -36,11 +117,6 @@
                         <div class="col-lg-3 col-sm-6">
                             <div class="product-card">
                                 <div class="product-grid-content">
-                                    <div class="product-header">
-                                        <h3><a
-                                                href="{{ route('frontend.novel.details', $course->id) }}">{{ $course->name }}</a>
-                                        </h3>
-                                    </div>
                                     <div class="product-card--body">
                                         <div class="card-image">
                                             <img style="height: 220px; width: 100%;"
@@ -73,31 +149,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- @php
-                                            $averageRating = number_format(
-                                                $course->reviews->map(fn($review) => $review->rating !== null ? (float)$review->rating : 0)->avg(),
-                                                1
-                                            );
-                                            $reviewCount = $course->reviews->count();
-                                            $averageRating = number_format($averageRating, 1); // e.g., 4.3
-                                        @endphp
-
-                                        <div class="rating-summary mt-3">
-                                            <div class="rating-stars">
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    <span class="fas fa-star {{ $i <= round($averageRating) ? 'star_on' : '' }}"></span>
-                                                @endfor
-                                            </div>
-                                            @if ($reviewCount > 0)
-                                                <div class="review-count text-muted small">
-                                                    ({{ $averageRating }} average / {{ $reviewCount }} {{ Str::plural('review', $reviewCount) }})
-                                                </div>
-                                            @else
-                                                <div class="review-count text-muted small">
-                                                    (No reviews yet)
-                                                </div>
-                                            @endif
-                                        </div> --}}
                                         @php
                                             // Only reviews with a rating (not null) for average calculation
                                             $validRatings = $course->reviews
@@ -111,7 +162,10 @@
                                             $reviewCount = $course->reviews->whereNotNull('review')->count();
                                         @endphp
 
-                                        <div class="rating-summary mt-3">
+                                        <div class="rating-summary">
+                                            <h3><a
+                                                    href="{{ route('frontend.novel.details', $course->id) }}">{{ $course->name }}</a>
+                                            </h3>
                                             <div class="rating-stars">
                                                 @for ($i = 1; $i <= 5; $i++)
                                                     <span

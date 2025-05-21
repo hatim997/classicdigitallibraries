@@ -32,7 +32,8 @@ class SubCourseController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $data = Subcourse::with('course')->select(['id', 'course_id', 'name', 'created_at'])->orderBy('id','desc');
+                $data = Subcourse::with('course')->select(['id', 'course_id', 'name', 'created_at']);
+                // $data = Subcourse::with('course')->orderBy('id', 'desc');
                 return DataTables::of($data)
                     ->addIndexColumn()
                     ->editColumn('created_at', function ($row) {
@@ -44,13 +45,13 @@ class SubCourseController extends Controller
                     ->addColumn('action', function ($row) {
                         $btn = '';
                         if (auth()->user()->can('update sub course')) {
-                            $btn .= '<a href="' . route('dashboard.subcourses.edit', $row->id) . '" class="btn btn-icon btn-text-primary waves-effect waves-light rounded-pill me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Course"><i class="ti ti-edit"></i></a>';
+                            $btn .= '<a href="' . route('dashboard.subcourses.edit', $row->id) . '" class="btn btn-icon btn-text-primary waves-effect waves-light rounded-pill me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Sub Course"><i class="ti ti-edit"></i></a>';
                         }
                         if (auth()->user()->can('delete sub course')) {
                             $btn .= '<form method="POST" action="' . route('dashboard.subcourses.destroy', $row->id) . '" style="display:inline-block;">
                                         ' . csrf_field() . method_field('DELETE') . '
                                         <button type="submit" class="btn btn-icon btn-text-danger waves-effect waves-light rounded-pill delete-record delete_confirmation" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="Delete Course"><i class="ti ti-trash"></i></button>
+                                                    title="Delete Sub Course"><i class="ti ti-trash"></i></button>
                                     </form>';
                         }
                         return $btn;
@@ -59,9 +60,11 @@ class SubCourseController extends Controller
                     ->make(true);
 
             } catch (\Throwable $e) {
+                Log::error('SubCourses Index Failed', ['error' => $e->getMessage()]);
                 return response()->json(['error' => 'Something went wrong while fetching data.'], 500);
             }
         } else {
+            Log::error('SubCourses Index Failed', ['error' => 'Invalid request.']);
             return response()->json(['error' => 'Invalid request.'], 400);
         }
     }

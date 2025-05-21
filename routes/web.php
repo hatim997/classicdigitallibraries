@@ -182,7 +182,7 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::get('users/json', [UserController::class, 'json'])->name('users.json');
     Route::get('courses/json', [CourseController::class, 'json'])->name('courses.json');
-    Route::get('subcourses/json', [SubCourseController::class, 'json'])->name('subcourses.json');
+    Route::get('get-json/subcourses', [SubCourseController::class, 'json'])->name('subcourses.json');
     Route::get('ebooks/json', [EbookController::class, 'json'])->name('ebooks.json');
     Route::get('episodes/json', [EpisodeController::class, 'json'])->name('episodes.json');
 });
