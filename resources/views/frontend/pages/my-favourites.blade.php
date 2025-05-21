@@ -49,7 +49,7 @@
             height: 100%;
             opacity: 0;
             transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
+            /* background: rgba(255, 255, 255, 0.9); */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -69,6 +69,7 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.2s ease;
             border: 2px solid #e5e7eb;
+            background-color: #fff;
             padding: 10px;
         }
 
