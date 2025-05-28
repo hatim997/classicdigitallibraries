@@ -59,8 +59,8 @@ Route::get('/current-time', function () {
 
 Auth::routes();
 // Route::get('/', function () {
-    //     return redirect()->route('frontend.home');
-    // });
+//     return redirect()->route('frontend.home');
+// });
     // Guest Routes
 Route::group(['middleware' => ['guest']], function () {
 
@@ -108,7 +108,6 @@ Route::middleware(['auth'])->group(function () {
         return view('errors.expiry');
     })->name('expiry');
     Route::middleware(['check.activation'])->group(function () {
-        Route::get('/', [FrontendHomeController::class, 'home'])->name('home');
         Route::resource('profile', ProfileController::class);
         Route::post('profile/setting/account/{id}', [ProfileController::class, 'accountDeactivation'])->name('account.deactivate');
         Route::post('profile/security/password/{id}', [ProfileController::class, 'passwordUpdate'])->name('update.password');
@@ -170,7 +169,7 @@ Route::middleware(['auth'])->group(function () {
 
             // Frontend Pages Routes
         Route::name('frontend.')->group(function () {
-            Route::get('novels', [FrontendHomeController::class, 'home'])->name('home');
+            Route::get('novels', [FrontendHomeController::class, 'novels'])->name('novels');
             Route::get('new-episodes', [FrontendHomeController::class, 'newEpisodes'])->name('new.episodes');
             Route::get('novels-deatils/{id}', [FrontendHomeController::class, 'novelDetails'])->name('novel.details');
             Route::get('subcourses/{id}', [FrontendHomeController::class, 'subcourseDetails'])->name('subcourse.details');
@@ -185,6 +184,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('get-json/subcourses', [SubCourseController::class, 'json'])->name('subcourses.json');
     Route::get('ebooks/json', [EbookController::class, 'json'])->name('ebooks.json');
     Route::get('episodes/json', [EpisodeController::class, 'json'])->name('episodes.json');
+});
+
+Route::name('frontend.')->group(function () {
+    Route::get('/', [FrontendHomeController::class, 'home'])->name('home');
 });
 
 //Artisan Routes

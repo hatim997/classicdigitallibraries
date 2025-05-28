@@ -16,27 +16,46 @@ class HomeController extends Controller
 {
     public function home()
     {
-        // try {
-        //     $courses = Course::with('reviews')
-        //         ->select('courses.*')
-        //         ->addSelect([
-        //             'adjusted_avg_rating' => function ($query) {
-        //                 $query->selectRaw('AVG(COALESCE(rating, 0))')
-        //                     ->from('reviews')
-        //                     ->whereColumn('reviews.course_id', 'courses.id');
-        //             }
-        //         ])
-        //         ->when(request('search'), function ($query) {
-        //             $query->where('name', 'like', '%' . request('search') . '%');
-        //         })
-        //         ->orderByDesc('adjusted_avg_rating') // Order using null-as-zero rating
-        //         ->paginate(12);
-        //     return view('frontend.pages.home', compact('courses'));
-        // } catch (\Throwable $th) {
-        //     Log::error('Home view Failed', ['error' => $th->getMessage()]);
-        //     return redirect()->back()->with('error', "Something went wrong! Please try again later");
-        //     throw $th;
-        // }
+        try {
+            $popularNovels = Course::with('reviews')
+                ->select('courses.*')
+                ->addSelect([
+                    'review_count' => function ($query) {
+                        $query->selectRaw('COUNT(*)')
+                            ->from('reviews')
+                            ->whereColumn('reviews.course_id', 'courses.id');
+                    },
+                    'adjusted_avg_rating' => function ($query) {
+                        $query->selectRaw('AVG(COALESCE(rating, 0))')
+                            ->from('reviews')
+                            ->whereColumn('reviews.course_id', 'courses.id');
+                    }
+                ])
+                ->when(request('search'), function ($query) {
+                    $query->where('name', 'like', '%' . request('search') . '%');
+                })
+                ->orderByDesc('review_count')           // First priority: Most reviews
+                ->orderByDesc('adjusted_avg_rating')    // Second priority: Highest rating
+                ->paginate(8);
+
+            $newNovels = Course::latest()
+                ->when(request('search'), function ($query) {
+                    $query->where('name', 'like', '%' . request('search') . '%');
+                })
+                ->take(8)
+                ->get();
+
+            return view('frontend.pages.home', compact('popularNovels','newNovels'));
+
+        } catch (\Throwable $th) {
+            Log::error('Home view Failed', ['error' => $th->getMessage()]);
+            return redirect()->back()->with('error', "Something went wrong! Please try again later");
+        }
+
+    }
+
+    public function novels()
+    {
         try {
             $courses = Course::with('reviews')
                 ->select('courses.*')
@@ -59,10 +78,10 @@ class HomeController extends Controller
                 ->orderByDesc('adjusted_avg_rating')    // Second priority: Highest rating
                 ->paginate(12);
 
-            return view('frontend.pages.home', compact('courses'));
+            return view('frontend.pages.novels', compact('courses'));
 
         } catch (\Throwable $th) {
-            Log::error('Home view Failed', ['error' => $th->getMessage()]);
+            Log::error('Novel view Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
         }
 

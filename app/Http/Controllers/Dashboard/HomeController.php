@@ -33,7 +33,7 @@ class HomeController extends Controller
                 $totalEpisodes = Biodata::count();
                 return view('dashboard.index', compact('totalUsers', 'totalDeactivatedUsers', 'totalActiveUsers', 'totalUnverifiedUsers', 'totalArchivedUsers','totalCourses','totalSubCourses','totalReviews','totalEpisodes'));
             }else{
-                return redirect()->route('frontend.home');
+                return redirect()->route('frontend.novels');
             }
         } catch (\Throwable $th) {
             Log::error('Dashboard Index Failed', ['error' => $th->getMessage()]);

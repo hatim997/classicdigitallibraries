@@ -22,7 +22,7 @@ class LoginController extends Controller
             if ($currentUser->hasRole('super-admin') || $currentUser->hasRole('admin')) {
                 return redirect()->route('dashboard');
             } else {
-                return redirect()->route('frontend.home');
+                return redirect()->route('frontend.novels');
             }
         } else {
             return view('auth.login');

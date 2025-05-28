@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-lg-5">
                     <div class="header-search-block">
-                        <form action="{{ route('frontend.home') }}" method="GET">
+                        <form action="{{ route('frontend.novels') }}" method="GET">
                             <input type="text" name="search" placeholder="Search Here">
                             <button type="submit">Search</button>
                         </form>
@@ -83,14 +83,23 @@
                     <div class="main-navigation flex-lg-right">
                         <ul class="main-menu menu-right main-menu--white li-last-0">
                             <li class="menu-item">
-                                <a class="{{ request()->routeIs('frontend.home') ? 'active-link' : '' }}" href="{{route('frontend.home')}}">Novels</a>
+                                <a class="{{ request()->routeIs('frontend.home') ? 'active-link' : '' }}" href="{{route('frontend.home')}}">Home</a>
                             </li>
-                            <li class="menu-item">
-                                <a class="{{ request()->routeIs('frontend.new.episodes') ? 'active-link' : '' }}" href="{{route('frontend.new.episodes')}}">What's New</a>
-                            </li>
-                            <li class="menu-item">
-                                <a class="{{ request()->routeIs('frontend.my-favourites') ? 'active-link' : '' }}" href="{{route('frontend.my-favourites')}}">My Favourites</a>
-                            </li>
+                            @if (Auth::check())
+                                <li class="menu-item">
+                                    <a class="{{ request()->routeIs('frontend.novels') ? 'active-link' : '' }}" href="{{route('frontend.novels')}}">Novels</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a class="{{ request()->routeIs('frontend.new.episodes') ? 'active-link' : '' }}" href="{{route('frontend.new.episodes')}}">What's New</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a class="{{ request()->routeIs('frontend.my-favourites') ? 'active-link' : '' }}" href="{{route('frontend.my-favourites')}}">My Favourites</a>
+                                </li>
+                            @else
+                                <li class="menu-item">
+                                    <a href="{{ route('login') }}" class="{{ request()->routeIs('login') ? 'active-link' : '' }}">Login</a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -129,7 +138,7 @@
         <div class="off-canvas-inner">
             <!-- search box start -->
             <div class="search-box offcanvas" style="visibility: visible !important;">
-                <form action="{{ route('frontend.home') }}" method="GET">
+                <form action="{{ route('frontend.novels') }}" method="GET">
                     <input type="text" name="search" placeholder="Search Here">
                     <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
                 </form>
@@ -140,9 +149,14 @@
                 <!-- mobile menu navigation start -->
                 <nav class="off-canvas-nav">
                     <ul class="mobile-menu main-mobile-menu">
-                        <li><a class="{{ request()->routeIs('frontend.home') ? 'active' : '' }}" href="{{route('frontend.home')}}">Novels</a></li>
-                        <li><a class="{{ request()->routeIs('frontend.new.episodes') ? 'active' : '' }}" href="{{route('frontend.new.episodes')}}">What's New</a></li>
-                        <li><a class="{{ request()->routeIs('frontend.my-favourites') ? 'active' : '' }}" href="{{route('frontend.my-favourites')}}">My Favourites</a></li>
+                        <li><a class="{{ request()->routeIs('frontend.home') ? 'active' : '' }}" href="{{route('frontend.home')}}">Home</a></li>
+                        @if (Auth::check())
+                            <li><a class="{{ request()->routeIs('frontend.novels') ? 'active' : '' }}" href="{{route('frontend.novels')}}">Novels</a></li>
+                            <li><a class="{{ request()->routeIs('frontend.new.episodes') ? 'active' : '' }}" href="{{route('frontend.new.episodes')}}">What's New</a></li>
+                            <li><a class="{{ request()->routeIs('frontend.my-favourites') ? 'active' : '' }}" href="{{route('frontend.my-favourites')}}">My Favourites</a></li>
+                        @else
+                            <li><a href="{{ route('login') }}" class="{{ request()->routeIs('login') ? 'active' : '' }}">Login</a></li>
+                        @endif
                     </ul>
                 </nav>
                 <!-- mobile menu navigation end -->
@@ -164,7 +178,10 @@
                 <div class="main-navigation flex-lg-right">
                     <ul class="main-menu menu-right ">
                         <li class="menu-item">
-                            <a class="{{ request()->routeIs('frontend.home') ? 'active' : '' }}" href="{{route('frontend.home')}}">Novels</a>
+                            <a class="{{ request()->routeIs('frontend.home') ? 'active' : '' }}" href="{{route('frontend.home')}}">Home</a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="{{ request()->routeIs('frontend.novels') ? 'active' : '' }}" href="{{route('frontend.novels')}}">Novels</a>
                         </li>
                         <li class="menu-item"><a class="{{ request()->routeIs('frontend.new.episodes') ? 'active' : '' }}" href="{{route('frontend.new.episodes')}}">What's New</a></li>
                         <li class="menu-item"><a class="{{ request()->routeIs('frontend.my-favourites') ? 'active' : '' }}" href="{{route('frontend.my-favourites')}}">My Favourites</a></li>
