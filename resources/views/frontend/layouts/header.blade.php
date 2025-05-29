@@ -180,11 +180,17 @@
                         <li class="menu-item">
                             <a class="{{ request()->routeIs('frontend.home') ? 'active' : '' }}" href="{{route('frontend.home')}}">Home</a>
                         </li>
-                        <li class="menu-item">
-                            <a class="{{ request()->routeIs('frontend.novels') ? 'active' : '' }}" href="{{route('frontend.novels')}}">Novels</a>
-                        </li>
-                        <li class="menu-item"><a class="{{ request()->routeIs('frontend.new.episodes') ? 'active' : '' }}" href="{{route('frontend.new.episodes')}}">What's New</a></li>
-                        <li class="menu-item"><a class="{{ request()->routeIs('frontend.my-favourites') ? 'active' : '' }}" href="{{route('frontend.my-favourites')}}">My Favourites</a></li>
+                        @if (Auth::check())
+                            <li class="menu-item">
+                                <a class="{{ request()->routeIs('frontend.novels') ? 'active' : '' }}" href="{{route('frontend.novels')}}">Novels</a>
+                            </li>
+                            <li class="menu-item"><a class="{{ request()->routeIs('frontend.new.episodes') ? 'active' : '' }}" href="{{route('frontend.new.episodes')}}">What's New</a></li>
+                            <li class="menu-item"><a class="{{ request()->routeIs('frontend.my-favourites') ? 'active' : '' }}" href="{{route('frontend.my-favourites')}}">My Favourites</a></li>
+                        @else
+                            <li class="menu-item">
+                                <a href="{{ route('login') }}" class="{{ request()->routeIs('login') ? 'active' : '' }}">Login</a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>
