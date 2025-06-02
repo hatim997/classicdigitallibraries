@@ -29,29 +29,22 @@ class RegisterController extends Controller
     }
 
     public function register_attempt(Request $request){
-    
+
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => [
-                'required',
-                Password::min(8)
-                ->letters()
-                ->mixedCase()
-                ->numbers()
-                ->symbols()
-            ],
+            'password' => ['required' , 'string',  'min:8' ],
             'confirm-password' => 'required|same:password',
             'terms' => 'required|string|max:255',
         ];
-        
+
         // Make 'g-recaptcha-response' nullable if CAPTCHA is not enabled
         if (config('captcha.version') !== 'no_captcha') {
             $rules['g-recaptcha-response'] = 'required|captcha';
         } else {
             $rules['g-recaptcha-response'] = 'nullable';
         }
-        
+
         $validate = Validator::make($request->all(), $rules);
         if($validate->fails()){
             return Redirect::back()->withErrors($validate)->withInput($request->all())->with('error', 'Validation Error!');
@@ -64,7 +57,7 @@ class RegisterController extends Controller
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
 
-            
+
             $username = $this->generateUsername($request->name);
 
             while (User::where('username', $username)->exists()) {
@@ -72,7 +65,7 @@ class RegisterController extends Controller
             }
             $user->username = $username;
             $user->save();
-    
+
             $user->syncRoles('user');
 
             $profile = new Profile();
@@ -82,7 +75,7 @@ class RegisterController extends Controller
 
             // Attempt to authenticate
             Auth::attempt(['email' => $request->email, 'password' => $request->password]);
-            
+
             if (Auth::check()) {
 
                 VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
@@ -94,7 +87,7 @@ class RegisterController extends Controller
             }
             app('notificationService')->notifyUsers([$user], 'Welcome to ' . Helper::getCompanyName());
             $user->sendEmailVerificationNotification();
-    
+
             // Commit the transaction
             DB::commit();
 
