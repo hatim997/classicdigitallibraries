@@ -51,6 +51,20 @@
                     </span>
                 @enderror
             </div>
+            <div class="mb-6 form-password-toggle">
+                <label class="form-label" for="edit_password">{{__('Password')}}</label><span class="text-danger">*</span>
+                <div class="input-group input-group-merge">
+                    <input type="password" id="edit_password" class="form-control @error('edit_password') is-invalid @enderror" name="edit_password"
+                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                        aria-describedby="edit_password" required/>
+                    <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                </div>
+                @error('edit_password')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
             <div class="mb-6">
                 <label class="form-label" for="user-role">{{ __('User Role') }}</label>
                 <select id="edit-user-role" name="edit_role" class="select2 form-select @error('edit_role') is-invalid @enderror">

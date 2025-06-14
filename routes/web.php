@@ -58,9 +58,9 @@ Route::get('/current-time', function () {
 });
 
 Auth::routes();
-// Route::get('/', function () {
-//     return redirect()->route('frontend.home');
-// });
+Route::get('/', function () {
+    return redirect()->route('frontend.home');
+});
     // Guest Routes
 Route::group(['middleware' => ['guest']], function () {
 
@@ -187,7 +187,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::name('frontend.')->group(function () {
-    Route::get('/', [FrontendHomeController::class, 'home'])->name('home');
+    Route::get('home', [FrontendHomeController::class, 'home'])->name('home');
 });
 
 //Artisan Routes

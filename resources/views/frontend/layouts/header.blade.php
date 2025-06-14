@@ -154,6 +154,11 @@
                             <li><a class="{{ request()->routeIs('frontend.novels') ? 'active' : '' }}" href="{{route('frontend.novels')}}">Novels</a></li>
                             <li><a class="{{ request()->routeIs('frontend.new.episodes') ? 'active' : '' }}" href="{{route('frontend.new.episodes')}}">What's New</a></li>
                             <li><a class="{{ request()->routeIs('frontend.my-favourites') ? 'active' : '' }}" href="{{route('frontend.my-favourites')}}">My Favourites</a></li>
+                            <li>
+                                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </a>
+                            </li>
                         @else
                             <li><a href="{{ route('login') }}" class="{{ request()->routeIs('login') ? 'active' : '' }}">Login</a></li>
                         @endif

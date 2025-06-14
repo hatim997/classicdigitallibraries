@@ -89,7 +89,7 @@ class EpisodeController extends Controller
         try {
             $courses = Course::all();
             $subcourses = Subcourse::all();
-            return view('dashboard.subcourses.create', compact('courses','subcourses'));
+            return view('dashboard.episodes.create', compact('courses','subcourses'));
         } catch (\Throwable $th) {
             Log::error('episode Create Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");

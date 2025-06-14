@@ -36,9 +36,14 @@
                     </span>
                 @enderror
             </div>
+            @php
+                use Carbon\Carbon;
+                $defaultExpiry = Carbon::now()->addMonth()->format('Y-m-d');
+            @endphp
             <div class="mb-6">
                 <label class="form-label" for="expiry_date">{{ __('Expiry Date') }}</label>
-                <input type="date" id="expiry_date" class="form-control @error('expiry_date') is-invalid @enderror" placeholder="Enter expiry date" name="expiry_date" required/>
+                <input type="date" id="expiry_date" class="form-control @error('expiry_date') is-invalid @enderror"
+                    placeholder="Enter expiry date" name="expiry_date" value="{{ old('expiry_date', $defaultExpiry) }}" required/>
                 @error('expiry_date')
                     <span class="invalid-feedback" role="alert">
                         {{ $message }}

@@ -151,15 +151,7 @@ class UserController extends Controller
             'last_name' => 'required|string|max:255',
             'expiry_date' => 'required|date',
             'email' => 'required|email|max:255|unique:users,email',
-            'password' => [
-                'required',
-                'string',
-                Password::min(8)
-                    ->letters()
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-            ],
+            'password' => 'required|string|min:8',
             'confirm-password' => 'required|same:password',
             'role' => 'required|exists:roles,name'
         ]);
@@ -280,7 +272,8 @@ class UserController extends Controller
             'edit_first_name' => 'required|string|max:255',
             'edit_last_name' => 'nullable|string|max:255',
             'edit_expiry_date' => 'required|date',
-            'edit_role' => 'required|exists:roles,name'
+            'edit_role' => 'required|exists:roles,name',
+            'edit_password' => 'nullable|string|min:8',
         ]);
 
         if ($validate->fails()) {
@@ -293,6 +286,9 @@ class UserController extends Controller
             $user = User::findOrFail($id);
             $user->name = $request->edit_first_name . ' ' . $request->edit_last_name;
             $user->expiry_date = $request->edit_expiry_date;
+            if($request->edit_password){
+                $user->password = Hash::make($request->edit_password);
+            }
             $user->save();
 
             $user->syncRoles($request->edit_role);
