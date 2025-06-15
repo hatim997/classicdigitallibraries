@@ -21932,7 +21932,7 @@ input[type=number] {
   content: "";
   border-width: 15px 12px;
   border-style: solid;
-  border-color: #0247bc transparent transparent transparent;
+  border-color: #f8b500 transparent transparent transparent;
 }
 .sb-custom-tab .nav.nav-tabs .arrow-icon:after {
   position: absolute;

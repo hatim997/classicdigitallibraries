@@ -11,6 +11,98 @@
             height: 150px;
             overflow-y: auto !important;
         }
+        .testimonial-image img{
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+            background-position: center center;
+            background-size: cover;
+            object-fit: cover;
+            transform: rotate(90deg);
+        }
+        .bg-slider-1 {
+            background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%); /* Soft golden amber */
+            color: #333; /* Dark grey text for readability */
+        }
+
+        .bg-slider-2 {
+            background: linear-gradient(135deg, #dfe9f3 0%, #ffffff 100%); /* Clean sky to white */
+            color: #222; /* Slightly darker text */
+        }
+
+        /* Section title */
+        .section-title h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            color: #2c3e50;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: #f8b500;
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        /* Testimonial Card Container */
+        .testimonial-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 25px 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-6px);
+        }
+
+        /* Image Styling */
+        .testimonial-image img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: block;
+            border: 3px solid #f8b500;
+        }
+
+        /* Testimonial Body */
+        .testimonial-body {
+            text-align: center;
+            background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
+        }
+
+        .testimonial-body p {
+            font-size: 1rem;
+            font-style: italic;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .client-name {
+            font-weight: 600;
+            color: #f8b500;
+            font-size: 0.95rem;
+        }
+        .feature-box{
+            background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%) !important;
+            border: none !important;
+        }
+        .sb-custom-tab .nav.nav-tabs .nav-item .nav-link.active {
+            border-color: transparent;
+            color: #0247bc;
+            background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%) !important;
+        }
     </style>
     <style>
         .product-card {
@@ -22,10 +114,12 @@
             position: relative;
             height: 92%;
         }
+
         .product-card-body {
             height: 380px;
             background-color: #f8fafc;
         }
+
         .product-card-body2 {
             height: 325px;
             background-color: #f8fafc;
@@ -107,8 +201,8 @@
 
 @section('content')
     <!--=================================
-                Hero Area
-            ===================================== -->
+                    Hero Area
+                ===================================== -->
     <section class="hero-area hero-slider-1">
         <div class="sb-slick-slider"
             data-slick-setting='{
@@ -119,18 +213,17 @@
                             "slidesToShow": 1,
                             "dots":true
                             }'>
-            <div class="single-slide bg-shade-whisper  ">
+            <div class="single-slide bg-shade-whisper bg-slider-1">
                 <div class="container">
                     <div class="home-content text-center text-sm-left position-relative">
                         <div class="hero-partial-image image-right">
-                            <img src="{{ asset('frontAssets/image/bg-images/home-slider-2-ai.png') }}" alt="">
+                            <img style="width: 60% !important;" src="{{ asset('frontAssets/image/bg-images/slider-01.png') }}" alt="">
                         </div>
                         <div class="row g-0">
                             <div class="col-xl-6 col-md-6 col-sm-7">
                                 <div class="home-content-inner content-left-side text-start">
-                                    <h1>H.G. Wells<br>
-                                        De Vengeance</h1>
-                                    <h2>Cover Up Front Of Books and Leave Summary</h2>
+                                    <h1>Anaya Ahmed</h1>
+                                    <h2>Jahan Mohabbat Lafzon Mein Dhalti Hai</h2>
                                     <a href="{{ route('frontend.novels') }}" class="btn btn-outlined--primary">
                                         Read Now
                                     </a>
@@ -140,18 +233,17 @@
                     </div>
                 </div>
             </div>
-            <div class="single-slide bg-ghost-white">
+            <div class="single-slide bg-ghost-white bg-slider-2">
                 <div class="container">
                     <div class="home-content text-center text-sm-left position-relative">
                         <div class="hero-partial-image image-left">
-                            <img src="{{ asset('frontAssets/image/bg-images/home-slider-1-ai.png') }}" alt="">
+                            <img style="width: 60% !important;" src="{{ asset('frontAssets/image/bg-images/slider-02.png') }}" alt="">
                         </div>
                         <div class="row align-items-center justify-content-start justify-content-md-end">
                             <div class="col-lg-6 col-xl-7 col-md-6 col-sm-7">
                                 <div class="home-content-inner content-right-side text-start">
-                                    <h1>J.D. Kurtness <br>
-                                        De Vengeance</h1>
-                                    <h2>Cover Up Front Of Books and Leave Summary</h2>
+                                    <h1>Ayat Noor</h1>
+                                    <h2>Har Safha Ik Nai Duniya, Ik Nai Kahani</h2>
                                     <a href="{{ route('frontend.novels') }}" class="btn btn-outlined--primary">
                                         Read Now
                                     </a>
@@ -164,8 +256,8 @@
         </div>
     </section>
     <!--=================================
-                Home Features Section
-            ===================================== -->
+                    Home Features Section
+                ===================================== -->
     <section class="mb--30">
         <div class="container">
             <div class="row">
@@ -225,8 +317,8 @@
     </section>
 
     <!--=================================
-                Promotion Section One
-            ===================================== -->
+                    Promotion Section One
+                ===================================== -->
     <section class="section-margin">
         <h2 class="sr-only">Promotion Section</h2>
         <div class="container">
@@ -245,8 +337,8 @@
         </div>
     </section>
     <!--=================================
-                Home Slider Tab
-            ===================================== -->
+                    Home Slider Tab
+                ===================================== -->
     <section class="section-padding">
         <h2 class="sr-only">Home Tab Slider Section</h2>
         <div class="container">
@@ -307,7 +399,8 @@
 
                                                         <div class="rating-summary">
                                                             <h3 class="novel-title">
-                                                                <a href="{{ route('frontend.novel.details', $course->id) }}">
+                                                                <a
+                                                                    href="{{ route('frontend.novel.details', $course->id) }}">
                                                                     {{ $course->name }}
                                                                 </a>
                                                             </h3>
@@ -363,7 +456,8 @@
 
                                                         <div class="rating-summary">
                                                             <h3 class="novel-title">
-                                                                <a href="{{ route('frontend.novel.details', $course->id) }}">
+                                                                <a
+                                                                    href="{{ route('frontend.novel.details', $course->id) }}">
                                                                     {{ $course->name }}
                                                                 </a>
                                                             </h3>
@@ -382,107 +476,111 @@
         </div>
     </section>
     <!--=================================
-        CLIENT TESTIMONIALS
-    ===================================== -->
-        <section class="section-margin">
-            <div class="container">
-                <div class="section-title section-title--bordered mb-lg--60">
-                    <h2>CLIENT TESTIMONIALS</h2>
-                </div>
-                <div class="sb-slick-slider testimonial-slider" data-slick-setting='{
-                    "autoplay": true,
-                    "autoplaySpeed": 8000,
-                    "slidesToShow":3,
-                    "dots":true
-                    }' data-slick-responsive='[
-                        {"breakpoint":1200, "settings": {"slidesToShow": 2} },
-                        {"breakpoint":992, "settings": {"slidesToShow": 1} },
-                        {"breakpoint":768, "settings": {"slidesToShow": 1} },
-                        {"breakpoint":490, "settings": {"slidesToShow": 1} }
-                    ]'>
-                    <div class="single-slide">
-                        <div class="testimonial-card">
-                            <div class="testimonial-image">
-                                <img src="{{asset('frontAssets/image/others/client-1.png')}}" alt="">
-                            </div>
-                            <div class="testimonial-body">
-                                <article>
-                                    <h2 class="sr-only">Testimonial Article</h2>
-                                    <p>version This is Photoshops of Lorem Ipsum. Proin gravida nibh vel velit.Lorem
-                                        ipsum dolor sit amet, consectetur
-                                        adipiscing elit. In molestie augue magna. Pell..</p>
-                                    <span class="d-block client-name">Rebecka Filson</span>
-                                </article>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-slide">
-                        <div class="testimonial-card">
-                            <div class="testimonial-image">
-                                <img src="{{asset('frontAssets/image/others/client-2.png')}}" alt="">
-                            </div>
-                            <div class="testimonial-body">
-                                <article>
-                                    <h2 class="sr-only">Testimonial Article</h2>
-                                    <p>In molestie augue magna.This is Photoshops version of Lorem Ipsum. Proin gravida
-                                        nibh vel velit.Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit. Pell..</p>
-                                    <span class="d-block client-name">Rebecka Filson</span>
-                                </article>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-slide">
-                        <div class="testimonial-card">
-                            <div class="testimonial-image">
-                                <img src="{{asset('frontAssets/image/others/client-3.png')}}" alt="">
-                            </div>
-                            <div class="testimonial-body">
-                                <article>
-                                    <h2 class="sr-only">Testimonial Article</h2>
-                                    <p>Lorem Ipsum This is Photoshops version of . Proin gravida nibh vel velit.Lorem
-                                        ipsum dolor sit amet, consectetur
-                                        adipiscing elit. In molestie augue magna. Pell..</p>
-                                    <span class="d-block client-name">Rebecka Filson</span>
-                                </article>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-slide">
-                        <div class="testimonial-card">
-                            <div class="testimonial-image">
-                                <img src="{{asset('frontAssets/image/others/client-4.png')}}" alt="">
-                            </div>
-                            <div class="testimonial-body">
-                                <article>
-                                    <h2 class="sr-only">Testimonial Article</h2>
-                                    <p>elit. In molestie This is Photoshops version of Lorem Ipsum. Proin gravida nibh
-                                        vel velit.Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing augue magna. Pell..</p>
-                                    <span class="d-block client-name">Rebecka Filson</span>
-                                </article>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-slide">
-                        <div class="testimonial-card">
-                            <div class="testimonial-image">
-                                <img src="{{asset('frontAssets/image/others/client-5.png')}}" alt="">
-                            </div>
-                            <div class="testimonial-body">
-                                <article>
-                                    <h2 class="sr-only">Testimonial Article</h2>
-                                    <p>Pell Photoshops version of Lorem Ipsum. Proin gravida nibh vel velit.Lorem ipsum
-                                        dolor sit amet, consectetur
-                                        adipiscing elit. In molestie augue magna. This is..</p>
-                                    <span class="d-block client-name">Rebecka Filson</span>
-                                </article>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            CLIENT TESTIMONIALS
+        ===================================== -->
+    <section class="section-margin">
+        <div class="container">
+            <div class="section-title section-title--bordered mb-lg--60">
+                <h2>CLIENT TESTIMONIALS</h2>
             </div>
-        </section>
+            <div class="sb-slick-slider testimonial-slider"
+                data-slick-setting='{
+            "autoplay": true,
+            "autoplaySpeed": 8000,
+            "slidesToShow":3,
+            "dots":true
+            }'
+                data-slick-responsive='[
+                {"breakpoint":1200, "settings": {"slidesToShow": 2} },
+                {"breakpoint":992, "settings": {"slidesToShow": 1} },
+                {"breakpoint":768, "settings": {"slidesToShow": 1} },
+                {"breakpoint":490, "settings": {"slidesToShow": 1} }
+            ]'>
+
+                <div class="single-slide">
+                    <div class="testimonial-card">
+                        <div class="testimonial-image">
+                            <img src="{{ asset('frontAssets/image/testimonials/testimonial-01.jpg') }}" alt="">
+                        </div>
+                        <div class="testimonial-body">
+                            <article>
+                                <h2 class="sr-only">Testimonial Article</h2>
+                                <p>Yaar such mein, itne maze ka content kahin aur nahi milta. Urdu novels
+                                    zabardast hai!</p>
+                                <span class="d-block client-name">Fatima Ali – Lahore</span>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-slide">
+                    <div class="testimonial-card">
+                        <div class="testimonial-image">
+                            <img src="{{ asset('frontAssets/image/testimonials/testimonial-04.jpg') }}" alt="">
+                        </div>
+                        <div class="testimonial-body">
+                            <article>
+                                <h2 class="sr-only">Testimonial Article</h2>
+                                <p>Main roz raat ko aik novel parhta hoon is website se. Har kahani dil ko choo jati hai!
+                                </p>
+                                <span class="d-block client-name">Ali Raza – Karachi</span>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-slide">
+                    <div class="testimonial-card">
+                        <div class="testimonial-image">
+                            <img src="{{ asset('frontAssets/image/testimonials/testimonial-02.jpg') }}" alt="">
+                        </div>
+                        <div class="testimonial-body">
+                            <article>
+                                <h2 class="sr-only">Testimonial Article</h2>
+                                <p>Bachpan se novels ka craze tha, lekin is site ne to meri reading life hi next level pe le
+                                    gayi hai!</p>
+                                <span class="d-block client-name">Sadia Malik – Islamabad</span>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-slide">
+                    <div class="testimonial-card">
+                        <div class="testimonial-image">
+                            <img src="{{ asset('frontAssets/image/testimonials/testimonial-05.jpg') }}" alt="">
+                        </div>
+                        <div class="testimonial-body">
+                            <article>
+                                <h2 class="sr-only">Testimonial Article</h2>
+                                <p>Storylines itni realistic hoti hain ke lagta hai jaise sab meri aankhon ke samne ho raha
+                                    ho.</p>
+                                <span class="d-block client-name">Hassan Javed – Faisalabad</span>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-slide">
+                    <div class="testimonial-card">
+                        <div class="testimonial-image">
+                            <img src="{{ asset('frontAssets/image/testimonials/testimonial-03.jpg') }}" alt="">
+                        </div>
+                        <div class="testimonial-body">
+                            <article>
+                                <h2 class="sr-only">Testimonial Article</h2>
+                                <p>Na sirf stories best hain, balkay website ka design bhi bohot user-friendly hai. Great
+                                    job team!</p>
+                                <span class="d-block client-name">Nimra Khan – Multan</span>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
 @endsection
 
 @section('script')
