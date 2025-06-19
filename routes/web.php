@@ -155,7 +155,8 @@ Route::middleware(['auth'])->group(function () {
 
             //SubCourses
             Route::resource('subcourses', SubCourseController::class);
-
+            Route::get('subcourses/episodes/{id}', [SubCourseController::class, 'episodes'])->name('subcourses.episodes');
+            Route::post('subcourses/episodes/shuffle/store', [SubCourseController::class, 'shuffleStore'])->name('subcourses.shuffle-store');
             //Ebooks
             Route::resource('ebooks', EbookController::class);
 

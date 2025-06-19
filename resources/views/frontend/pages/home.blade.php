@@ -6,12 +6,14 @@
 @section('author', '')
 
 @section('css')
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
     <style>
         .nice-select ul {
             height: 150px;
             overflow-y: auto !important;
         }
-        .testimonial-image img{
+
+        .testimonial-image img {
             height: 100px;
             width: 100px;
             border-radius: 50%;
@@ -20,14 +22,19 @@
             object-fit: cover;
             transform: rotate(90deg);
         }
+
         .bg-slider-1 {
-            background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%); /* Soft golden amber */
-            color: #333; /* Dark grey text for readability */
+            background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
+            /* Soft golden amber */
+            color: #333;
+            /* Dark grey text for readability */
         }
 
         .bg-slider-2 {
-            background: linear-gradient(135deg, #dfe9f3 0%, #ffffff 100%); /* Clean sky to white */
-            color: #222; /* Slightly darker text */
+            background: linear-gradient(135deg, #dfe9f3 0%, #ffffff 100%);
+            /* Clean sky to white */
+            color: #222;
+            /* Slightly darker text */
         }
 
         /* Section title */
@@ -94,10 +101,12 @@
             color: #f8b500;
             font-size: 0.95rem;
         }
-        .feature-box{
+
+        .feature-box {
             background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%) !important;
             border: none !important;
         }
+
         .sb-custom-tab .nav.nav-tabs .nav-item .nav-link.active {
             border-color: transparent;
             color: #0247bc;
@@ -197,12 +206,236 @@
             transition: color 0.2s ease;
         }
     </style>
+
+    <style>
+        /* Urdu Pamphlet Modal Styles */
+        .urdu-pamphlet-modal .modal-content {
+            background: radial-gradient(circle at top right, #fff3e0, #ffe0b2);
+            /* Soft cream to dark maroon */
+            border-radius: 16px;
+            border: 2px solid #ffd700;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            font-family: 'Noto Nastaliq Urdu', serif;
+            max-width: 360px;
+            margin: auto;
+            animation: slideIn 0.6s ease-in-out;
+        }
+
+        .urdu-pamphlet-modal .modal-header {
+            border-bottom: none;
+            padding: 0;
+            position: relative;
+        }
+
+        .urdu-pamphlet-modal .pamphlet-header-image {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-bottom: 2px solid #ffd700;
+        }
+
+        .urdu-pamphlet-modal .btn-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #fff;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .urdu-pamphlet-modal .btn-close i {
+            color: #8b0000;
+        }
+
+        .urdu-pamphlet-modal .btn-close:hover {
+            background: #ffd700;
+            transform: scale(1.1);
+        }
+
+        .urdu-pamphlet-modal .modal-body {
+            padding: 1.4rem;
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .urdu-pamphlet-modal .modal-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            direction: rtl;
+        }
+
+        .urdu-pamphlet-modal .pamphlet-subtitle {
+            font-size: 1rem;
+            color: #8b0000;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            direction: rtl;
+        }
+
+        .urdu-pamphlet-modal .pamphlet-text {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #222;
+            direction: rtl;
+            margin-bottom: 1.3rem;
+        }
+
+        .urdu-pamphlet-modal .pamphlet-benefits {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1.2rem;
+            /* direction: rtl; */
+            text-align: right;
+        }
+
+        .urdu-pamphlet-modal .pamphlet-benefits li {
+            font-size: 0.9rem;
+            color: #333;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+
+        .urdu-pamphlet-modal .pamphlet-benefits li i {
+            color: #8b0000;
+            margin-left: 0.5rem;
+        }
+
+        .urdu-pamphlet-modal .btn-explore {
+            background: #8b0000;
+            color: #fff;
+            border: 2px solid #ffd700;
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 1rem;
+            display: inline-block;
+            width: 85%;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+
+        .urdu-pamphlet-modal .btn-explore:hover {
+            background: #ffd700;
+            color: #8b0000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .urdu-pamphlet-modal .modal-footer {
+            justify-content: center;
+            padding: 0 1rem 1rem;
+            border-top: none;
+        }
+
+        .urdu-pamphlet-modal .dismiss-link {
+            font-size: 0.85rem;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .urdu-pamphlet-modal .dismiss-link:hover {
+            color: #8b0000;
+            text-decoration: underline;
+        }
+
+        /* Modal Background Pattern */
+        .urdu-pamphlet-modal .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('{{ asset('frontAssets/image/bg-images/pamphlet.jpg') }}') repeat;
+            opacity: 0.03;
+            z-index: 0;
+        }
+
+        .urdu-pamphlet-modal .modal-content>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Tweaks */
+        @media (max-width: 576px) {
+            .urdu-pamphlet-modal .modal-content {
+                max-width: 95%;
+            }
+
+            .urdu-pamphlet-modal .modal-title {
+                font-size: 1.4rem;
+            }
+
+            .urdu-pamphlet-modal .pamphlet-text {
+                font-size: 0.85rem;
+            }
+
+            .urdu-pamphlet-modal .pamphlet-benefits li {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 @endsection
 
 @section('content')
+    <!-- Urdu Pamphlet Modal -->
+    <div class="modal fade urdu-pamphlet-modal" id="urduPamphletModal" tabindex="-1" aria-labelledby="urduPamphletModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <img src="{{ asset('frontAssets/image/bg-images/pamphlet.jpg') }}" alt="Urdu Novel Header"
+                        class="pamphlet-header-image">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                            class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="pamphlet-content">
+                        <h5 class="modal-title" id="urduPamphletModalLabel">کلاسک ڈیجیٹل لائبریریز</h5>
+                        <p class="pamphlet-subtitle">پہلا مہینہ مفت!</p>
+                        <p class="pamphlet-text">
+                            لفظوں کی دنیا میں کھو جائیں۔ ہر کہانی آپ کے دل کو چھو لے گی — عشق، جذبہ، اور سسپنس سے بھرپور۔
+                        </p>
+                        <ul class="pamphlet-benefits">
+                            <li><i class="fas fa-book-open mx-2"></i> دلکش پلاٹس</li>
+                            <li><i class="fas fa-heart mx-2"></i> جذباتی رنگ</li>
+                            <li><i class="fas fa-star mx-2"></i> نئے لکھاری، نئی کہانیاں</li>
+                        </ul>
+                        <a href="{{ route('frontend.novels') }}" class="btn btn-explore">ابھی مطالعہ کریں</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="dismiss-link" data-bs-dismiss="modal">بعد میں دیکھیں</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!--=================================
-                    Hero Area
-                ===================================== -->
+                                Hero Area
+                            ===================================== -->
     <section class="hero-area hero-slider-1">
         <div class="sb-slick-slider"
             data-slick-setting='{
@@ -217,7 +450,8 @@
                 <div class="container">
                     <div class="home-content text-center text-sm-left position-relative">
                         <div class="hero-partial-image image-right">
-                            <img style="width: 60% !important;" src="{{ asset('frontAssets/image/bg-images/slider-01.png') }}" alt="">
+                            <img style="width: 60% !important;"
+                                src="{{ asset('frontAssets/image/bg-images/slider-01.png') }}" alt="">
                         </div>
                         <div class="row g-0">
                             <div class="col-xl-6 col-md-6 col-sm-7">
@@ -237,7 +471,8 @@
                 <div class="container">
                     <div class="home-content text-center text-sm-left position-relative">
                         <div class="hero-partial-image image-left">
-                            <img style="width: 60% !important;" src="{{ asset('frontAssets/image/bg-images/slider-02.png') }}" alt="">
+                            <img style="width: 60% !important;"
+                                src="{{ asset('frontAssets/image/bg-images/slider-02.png') }}" alt="">
                         </div>
                         <div class="row align-items-center justify-content-start justify-content-md-end">
                             <div class="col-lg-6 col-xl-7 col-md-6 col-sm-7">
@@ -256,8 +491,8 @@
         </div>
     </section>
     <!--=================================
-                    Home Features Section
-                ===================================== -->
+                                Home Features Section
+                            ===================================== -->
     <section class="mb--30">
         <div class="container">
             <div class="row">
@@ -317,8 +552,8 @@
     </section>
 
     <!--=================================
-                    Promotion Section One
-                ===================================== -->
+                                Promotion Section One
+                            ===================================== -->
     <section class="section-margin">
         <h2 class="sr-only">Promotion Section</h2>
         <div class="container">
@@ -337,8 +572,8 @@
         </div>
     </section>
     <!--=================================
-                    Home Slider Tab
-                ===================================== -->
+                                Home Slider Tab
+                            ===================================== -->
     <section class="section-padding">
         <h2 class="sr-only">Home Tab Slider Section</h2>
         <div class="container">
@@ -476,8 +711,8 @@
         </div>
     </section>
     <!--=================================
-            CLIENT TESTIMONIALS
-        ===================================== -->
+                        CLIENT TESTIMONIALS
+                    ===================================== -->
     <section class="section-margin">
         <div class="container">
             <div class="section-title section-title--bordered mb-lg--60">
@@ -584,5 +819,17 @@
 @endsection
 
 @section('script')
-    <script></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // if (!localStorage.getItem('urduPamphletModalShown')) {
+            var urduPamphletModal = new bootstrap.Modal(document.getElementById('urduPamphletModal'), {
+                backdrop: 'static',
+                keyboard: false
+            });
+            urduPamphletModal.show();
+            localStorage.setItem('urduPamphletModalShown', 'true');
+            // }
+        });
+    </script>
+
 @endsection

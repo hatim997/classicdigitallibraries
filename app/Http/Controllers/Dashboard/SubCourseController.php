@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Biodata;
 use App\Models\Course;
 use App\Models\Subcourse;
 use Illuminate\Http\Request;
@@ -53,6 +54,9 @@ class SubCourseController extends Controller
                                         <button type="submit" class="btn btn-icon btn-text-danger waves-effect waves-light rounded-pill delete-record delete_confirmation" data-bs-toggle="tooltip" data-bs-placement="top"
                                                     title="Delete Sub Course"><i class="ti ti-trash"></i></button>
                                     </form>';
+                        }
+                        if (auth()->user()->can('update episode')) {
+                            $btn .= '<a href="' . route('dashboard.subcourses.episodes', $row->id) . '" class="btn btn-icon btn-text-warning waves-effect waves-light rounded-pill me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Shuffle Episodes"><i class="ti ti-arrows-shuffle"></i></a>';
                         }
                         return $btn;
                     })
@@ -187,6 +191,51 @@ class SubCourseController extends Controller
         } catch (\Throwable $th) {
             Log::error('Sub Course Delete Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
+            throw $th;
+        }
+    }
+
+    public function episodes(string $id)
+    {
+        $this->authorize('view episode');
+        try {
+            $episodes = Biodata::where('sub_course_id', $id)->orderByRaw('CAST(position AS UNSIGNED) ASC')->get();
+            return view('dashboard.subcourses.episodes', compact('episodes'));
+        } catch (\Throwable $th) {
+            Log::error('Sub Course Delete Failed', ['error' => $th->getMessage()]);
+            return redirect()->back()->with('error', "Something went wrong! Please try again later");
+            throw $th;
+        }
+    }
+
+    public function shuffleStore(Request $request)
+    {
+        $this->authorize('update episode');
+        $validator = Validator::make($request->all(), [
+            'ids' => 'required|array',
+            'ids.*' => 'exists:biodatas,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation Error!',
+            ], 404);
+        }
+        try {
+            foreach ($request->ids as $index => $bundleId) {
+                Biodata::where('id', $bundleId)->update(['position' => $index + 1]);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => 'Episodes Shuffled Successfully!',
+            ], 200);
+        } catch (\Throwable $th) {
+            Log::error('Kit Product Bundle Shuffle Store Failed', ['error' => $th->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong! Please try again later',
+            ], 404);
             throw $th;
         }
     }

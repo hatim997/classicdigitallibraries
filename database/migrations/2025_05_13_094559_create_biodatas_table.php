@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('folder')->nullable();
             $table->foreignId('sub_course_id ')->nullable()->constrained('subcourses')->nullOnDelete();
             $table->string('audio')->nullable();
+            $table->string('position')->default(0);
             $table->foreignId('course_id ')->nullable()->constrained('courses')->nullOnDelete();
             $table->timestamps();
         });

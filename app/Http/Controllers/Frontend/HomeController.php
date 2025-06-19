@@ -103,7 +103,7 @@ class HomeController extends Controller
     public function newEpisodes()
     {
         try {
-            $biodatas = Biodata::with('course','subcourse')->where('is_new', 1)->limit(12)->orderBy('id','desc')->get();
+            $biodatas = Biodata::with('course','subcourse')->where('is_new', 1)->limit(32)->orderBy('id','desc')->get();
             return view('frontend.pages.new_episodes', compact('biodatas'));
         } catch (\Throwable $th) {
             Log::error('New Episodes view Failed', ['error' => $th->getMessage()]);

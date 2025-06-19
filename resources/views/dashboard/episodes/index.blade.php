@@ -79,7 +79,7 @@
                     },
                     columns: [
                         { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                        { data: 'namaSiswa', name: 'name' },
+                        { data: 'namaSiswa', name: 'namaSiswa' },
                         { data: 'episode', name: 'episode' },
                         { data: 'status', name: 'status' },
                         { data: 'created_at', name: 'created_at' },
