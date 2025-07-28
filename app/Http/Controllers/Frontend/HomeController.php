@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Biodata;
+use App\Models\Contact;
 use App\Models\Course;
 use App\Models\Review;
 use App\Models\Subcourse;
 use App\Models\UserFavourite;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
@@ -49,6 +52,71 @@ class HomeController extends Controller
 
         } catch (\Throwable $th) {
             Log::error('Home view Failed', ['error' => $th->getMessage()]);
+            return redirect()->back()->with('error', "Something went wrong! Please try again later");
+        }
+
+    }
+
+    public function contact()
+    {
+        try {
+            return view('frontend.pages.contact');
+        } catch (\Throwable $th) {
+            Log::error('Contact view Failed', ['error' => $th->getMessage()]);
+            return redirect()->back()->with('error', "Something went wrong! Please try again later");
+        }
+
+    }
+
+    public function contactSubmit(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'message' => 'nullable|string',
+            'g-recaptcha-response' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => '6Le5wpErAAAAAHsNtiBRD42Rp7XgcZBVS7CQ20RT',
+            'response' => $request['g-recaptcha-response'],
+        ]);
+        $data = $response->json();
+
+        if (!$data['success']) {
+            // Handle failure (e.g., show an error message)
+            return redirect()->back()->withErrors(['captcha' => 'reCAPTCHA verification failed. Please try again.'])->withInput();
+        }
+        try {
+            $contact = new Contact();
+            $contact->name = $request->name;
+            $contact->email = $request->email;
+            $contact->message = $request->message;
+            $contact->save();
+
+            $email_data = [
+                "name" => $request->name,
+                "email" => $request->email,
+                "message" => $request->message,
+            ];
+
+            $to_name = $request->name;
+            $user_email = $request->email;
+            $internal_email = "admin@classicdigitallibraries.com";
+
+            Mail::send("emails.contact-mail", ["email_data" => $email_data], function ($message) use ($to_name, $internal_email) {
+                $message->to($internal_email, $to_name)
+                        ->subject("New Contact Form Submission")
+                        ->from("info@classicdigitallibraries.com", "Classic Digital Libraries");
+            });
+
+            return redirect()->back()->with('success', "Your message has been sent successfully!");
+
+        } catch (\Throwable $th) {
+            Log::error('Contact Submit Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
         }
 

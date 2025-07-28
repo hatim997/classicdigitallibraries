@@ -85,6 +85,9 @@
                             <li class="menu-item">
                                 <a class="{{ request()->routeIs('frontend.home') ? 'active-link' : '' }}" href="{{route('frontend.home')}}">Home</a>
                             </li>
+                            <li class="menu-item">
+                                <a class="{{ request()->routeIs('frontend.contact') ? 'active-link' : '' }}" href="{{route('frontend.contact')}}">Contact Us</a>
+                            </li>
                             @if (Auth::check())
                                 <li class="menu-item">
                                     <a class="{{ request()->routeIs('frontend.novels') ? 'active-link' : '' }}" href="{{route('frontend.novels')}}">Novels</a>
@@ -150,6 +153,7 @@
                 <nav class="off-canvas-nav">
                     <ul class="mobile-menu main-mobile-menu">
                         <li><a class="{{ request()->routeIs('frontend.home') ? 'active' : '' }}" href="{{route('frontend.home')}}">Home</a></li>
+                        <li><a class="{{ request()->routeIs('frontend.contact') ? 'active' : '' }}" href="{{route('frontend.contact')}}">Contact Us</a></li>
                         @if (Auth::check())
                             <li><a class="{{ request()->routeIs('frontend.novels') ? 'active' : '' }}" href="{{route('frontend.novels')}}">Novels</a></li>
                             <li><a class="{{ request()->routeIs('frontend.new.episodes') ? 'active' : '' }}" href="{{route('frontend.new.episodes')}}">What's New</a></li>
@@ -184,6 +188,9 @@
                     <ul class="main-menu menu-right ">
                         <li class="menu-item">
                             <a class="{{ request()->routeIs('frontend.home') ? 'active' : '' }}" href="{{route('frontend.home')}}">Home</a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="{{ request()->routeIs('frontend.contact') ? 'active' : '' }}" href="{{route('frontend.contact')}}">Contact Us</a>
                         </li>
                         @if (Auth::check())
                             <li class="menu-item">

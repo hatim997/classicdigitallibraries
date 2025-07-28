@@ -22533,7 +22533,7 @@ input[type=number] {
   ul.main-menu {
     display: -webkit-box;
     display: -ms-flexbox;
-    display: flex;
+    /* display: flex; */
     position: relative;
     -webkit-transition: 0.4s;
     transition: 0.4s;

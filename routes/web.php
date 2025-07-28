@@ -189,6 +189,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::name('frontend.')->group(function () {
     Route::get('home', [FrontendHomeController::class, 'home'])->name('home');
+    Route::get('contact', [FrontendHomeController::class, 'contact'])->name('contact');
+    Route::post('contact', [FrontendHomeController::class, 'contactSubmit'])->name('contact.submit');
 });
 
 //Artisan Routes
