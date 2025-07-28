@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\GithubController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Dashboard\CourseController;
 use App\Http\Controllers\Dashboard\EbookController;
 use App\Http\Controllers\Dashboard\EpisodeController;
@@ -163,6 +164,9 @@ Route::middleware(['auth'])->group(function () {
             //Episodes
             Route::resource('episodes', EpisodeController::class);
 
+            //Contacts
+            Route::resource('contacts', ContactController::class);
+
 
 
 
@@ -185,6 +189,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('get-json/subcourses', [SubCourseController::class, 'json'])->name('subcourses.json');
     Route::get('ebooks/json', [EbookController::class, 'json'])->name('ebooks.json');
     Route::get('episodes/json', [EpisodeController::class, 'json'])->name('episodes.json');
+    Route::get('contacts/json', [ContactController::class, 'json'])->name('contacts.json');
 });
 
 Route::name('frontend.')->group(function () {
